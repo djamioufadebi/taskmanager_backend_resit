@@ -15,9 +15,21 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        
-        return response()->json(TaskResource::collection($request->user()->tasks));
+        // Récupère les tâches de l'utilisateur authentifié
+        $query = Task::where('user_id', $request->user()->id);
 
+        // Applique un filtre par statut 
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        // Appliquer un filtre de recherche par titre 
+        if ($request->filled('search')) {
+            $query->where('title', 'LIKE', "%{$request->input('search')}%");
+        }
+
+        // Retourner les tâches filtrées sous forme de collection
+        return response()->json(TaskResource::collection($query->get()));
     }
 
     /**
@@ -25,14 +37,9 @@ class TaskController extends Controller
      */
     public function store(TaskStoreRequest $request)
     {
-       
         $validatedData = $request->validated();
-
         $task = $request->user()->tasks()->create($validatedData);
-
-        return response()->json(
-                
-            $task, 201);
+        return response()->json($task, 201);
     }
 
     /**
@@ -40,16 +47,13 @@ class TaskController extends Controller
      */
     public function show(Request $request, Task $task)
     {
-
         if ($task->user_id !== $request->user()->id) {
             return response()->json([
                 'message' => 
                 "Vous n'avez l'autorisation de voir cette tâche"], 
                 403);
         }
-
         $task->update($request->all());
-
         return response()->json($task);
     }
 
@@ -61,9 +65,7 @@ class TaskController extends Controller
         if ($task->user_id !== $request->user()->id) {
             return response()->json(['message' => "Vous n'avez l'autorisation de modifier cette tâche"], 403);
         }
-
         $task->update($request->validated());
-
         return response()->json($task);
     }
 
@@ -72,8 +74,14 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+
+        if ($task->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Non autorisé'], 403);
+        }
+
         $task->delete();
-        return response()->json(['message' => 'Tâche supprimée avec succès']);
+        return response()->json(['message' => 'Tâche suppriméeavec succès']);
+        
     }
      
 }
