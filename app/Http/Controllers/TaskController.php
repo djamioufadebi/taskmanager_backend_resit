@@ -13,7 +13,7 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    /*public function index(Request $request)
     {
         // Récupère les tâches de l'utilisateur authentifié
         $query = Task::where('user_id', $request->user()->id);
@@ -22,14 +22,46 @@ class TaskController extends Controller
         if ($request->filled('status')) {
             $query->where('status', $request->input('status'));
         }
-
         // Appliquer un filtre de recherche par titre 
         if ($request->filled('search')) {
             $query->where('title', 'LIKE', "%{$request->input('search')}%");
         }
 
+        // Trier les tâches par date de création (les plus récentes en premier)
+        $query->orderBy('created_at', 'desc');
+
         // Retourner les tâches filtrées sous forme de collection
         return response()->json(TaskResource::collection($query->get()));
+    }*/
+
+    
+
+    public function index(Request $request)
+    {
+        // Récupère les tâches de l'utilisateur authentifié
+        $query = Task::where('user_id', $request->user()->id);
+
+        // Appliquer les filtres
+        $this->applyFilters($query, $request);
+
+        // Trier les tâches par date de création (les plus récentes en premier)
+        $query->orderBy('created_at', 'desc');
+
+        // Retourner les tâches paginées pour de meilleures performances
+        return response()->json(TaskResource::collection($query->paginate(10)));
+    }
+
+    private function applyFilters($query, Request $request)
+    {
+        // Filtrer par statut
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        // Filtrer par titre avec recherche
+        if ($request->filled('search')) {
+            $query->where('title', 'LIKE', "%{$request->input('search')}%");
+        }
     }
 
     /**
@@ -39,7 +71,11 @@ class TaskController extends Controller
     {
         $validatedData = $request->validated();
         $task = $request->user()->tasks()->create($validatedData);
-        return response()->json($task, 201);
+        // Retourner la réponse avec un message de succès
+        return response()->json([
+            'task' => $task,
+            'message' => 'Tâche créée avec succès !'
+        ], 201);
     }
 
     /**
@@ -66,7 +102,11 @@ class TaskController extends Controller
             return response()->json(['message' => "Vous n'avez l'autorisation de modifier cette tâche"], 403);
         }
         $task->update($request->validated());
-        return response()->json($task);
+        // Retourner la réponse JSON avec un message de succès
+        return response()->json([
+            'task' => $task,
+            'message' => 'Tâche mise à jour avec succès !'
+        ], 201);
     }
 
     /**
@@ -74,14 +114,11 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-
         if ($task->user_id !== auth()->id()) {
             return response()->json(['message' => 'Non autorisé'], 403);
         }
-
         $task->delete();
         return response()->json(['message' => 'Tâche suppriméeavec succès']);
-        
     }
      
 }
