@@ -13,29 +13,6 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    /*public function index(Request $request)
-    {
-        // Récupère les tâches de l'utilisateur authentifié
-        $query = Task::where('user_id', $request->user()->id);
-
-        // Applique un filtre par statut 
-        if ($request->filled('status')) {
-            $query->where('status', $request->input('status'));
-        }
-        // Appliquer un filtre de recherche par titre 
-        if ($request->filled('search')) {
-            $query->where('title', 'LIKE', "%{$request->input('search')}%");
-        }
-
-        // Trier les tâches par date de création (les plus récentes en premier)
-        $query->orderBy('created_at', 'desc');
-
-        // Retourner les tâches filtrées sous forme de collection
-        return response()->json(TaskResource::collection($query->get()));
-    }*/
-
-    
-
     public function index(Request $request)
     {
         // Récupère les tâches de l'utilisateur authentifié
