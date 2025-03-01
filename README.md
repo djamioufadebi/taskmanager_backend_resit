@@ -32,7 +32,6 @@ L’API utilise Laravel Sanctum pour l’authentification.
 - **Validation des données** avec `FormRequest` pour éviter les erreurs.
 
 ## Prérequis
-
 - PHP 8.1+  
 - Composer  
 - MySQL
@@ -41,8 +40,7 @@ L’API utilise Laravel Sanctum pour l’authentification.
 
 ## Installation
 
-### Cloner le projet
-
+ ### Cloner le projet
 ```bash
   git clone https://github.com/djamioufadebi/task_manager_app.git
 ```
