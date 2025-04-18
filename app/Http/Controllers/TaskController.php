@@ -25,21 +25,45 @@ class TaskController extends Controller
         $query->orderBy('created_at', 'desc');
 
         // Retourner les tâches paginées pour de meilleures performances
-        return response()->json(TaskResource::collection($query->paginate(10)));
+        return response()->json(TaskResource::collection($query->paginate(2)));
     }
 
     private function applyFilters($query, Request $request)
     {
-        // Filtrer par statut
+        // Recherche globale 
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('title', 'like', "%{$searchTerm}%")
+                ->orWhere('description', 'like', "%{$searchTerm}%")
+                ->orWhere('status', 'like', "%{$searchTerm}%");
+                // Ajouter ici d'autres colonnes si besoin
+            });
+        }
+
+        // Filtre par statut exact
         if ($request->filled('status')) {
             $query->where('status', $request->input('status'));
         }
 
-        // Filtrer par titre avec recherche
-        if ($request->filled('search')) {
-            $query->where('title', 'LIKE', "%{$request->input('search')}%");
+        // Filtre par priorité
+        if ($request->filled('priority')) {
+            $query->where('priority', $request->input('priority'));
         }
+
+        // Filtre par date de création
+        if ($request->filled('created_from')) {
+            $query->whereDate('created_at', '>=', $request->input('created_from'));
+        }
+
+        if ($request->filled('created_to')) {
+            $query->whereDate('created_at', '<=', $request->input('created_to'));
+        }
+
+        return $query;
     }
+
 
     /**
      * Store a newly created resource in storage.
