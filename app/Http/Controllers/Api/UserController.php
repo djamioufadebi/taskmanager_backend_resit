@@ -67,14 +67,18 @@ class UserController extends Controller
         ]);
 
         // On retourne la réponse JSON
-        return response()->json();
+        return response()->json([
+            'message' => 'Utilisateur mise à jour avec succès !'
+        ], 201);
     }
 
     public function destroy(User $user)
     {
         $user->delete();
         // On retourne la réponse JSON
-        return response()->json();
+        return response()->json([
+            'message' => 'Utilisateur supprimé avec succès !'
+        ], 201);
     }
 
 }

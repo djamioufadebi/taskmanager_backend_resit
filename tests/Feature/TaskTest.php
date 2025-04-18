@@ -53,12 +53,13 @@ class TaskTest extends TestCase
 
     public function test_user_can_update_task()
     {
+        $this->withExceptionHandling();
         $task = Task::factory()->create([
             'title' => 'Ancien titre',
             'status' => 'en attente',
         ]);
 
-        $response = $this->putJson("/api/tasks/{$task->id}", [
+        $response = $this->putJson("/api/tasks/".$task->id, [
             'title' => 'Nouveau titre', 
             'description' => 'Nouvelle description',
             'status' => 'en cours',  
@@ -79,9 +80,10 @@ class TaskTest extends TestCase
     /** @test */
     public function user_can_delete_a_task()
     {
+        $this->withExceptionHandling();
         $task = Task::factory()->create(['user_id' => $this->user->id]);
 
-        $response = $this->deleteJson("/api/tasks/{$task->id}", [], [
+        $response = $this->deleteJson("/api/tasks/".$task->id, [], [
             'Authorization' => "Bearer {$this->token}"
         ]);
 
@@ -91,6 +93,7 @@ class TaskTest extends TestCase
 
     public function test_unauthorized_access_for_task_creation()
     {
+        $this->withExceptionHandling();
         $response = $this->postJson('/api/tasks', [
             'title' => 'Nouvelle tâche',
             'description' => 'Ceci est une tâche test.',

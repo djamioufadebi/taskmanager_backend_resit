@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->date('due_date')->nullable();
-            $table->enum('status', ['en attente', 'en cours', 'terminé'])->default('en attente');
+            $table->enum('status', ['en_attente', 'en_cours', 'terminé'])->default('en_attente');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

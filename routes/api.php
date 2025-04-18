@@ -25,16 +25,13 @@ Route::controller(AuthController::class)->group(function(){
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
 
+
 Route::middleware('auth:sanctum')->group(function () {
-
-    //Route::resource('users', UserController::class);
     
+    //Route::resource('users', UserController::class);
     Route::apiResource("users", UserController::class);
-
-    /*Route::post('/users', [UserController::class, 'store']);
-    Route::put('/users/{user}', [UserController::class, 'update']);
-    Route::delete('/users/{user}', [UserController::class, 'destroy']);*/
-
+    
+    
     Route::get('/tasks', [TaskController::class, 'index']);
     Route::post('/tasks', [TaskController::class, 'store']);
     Route::put('/tasks/{task}', [TaskController::class, 'update']);

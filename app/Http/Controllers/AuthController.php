@@ -39,7 +39,6 @@ class AuthController extends Controller
                 ['message' => 'Informations incorrectes'], 
                 401);
         }
-
             return response()->json([
 
                         'token' => $request->user()->createToken('token')->plainTextToken
@@ -49,6 +48,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
-        return response()->json(['message' => 'Logged out']);
+        return response()->json(['message' => 'Vous êtes déconnecté ']);
     }
+
 }
