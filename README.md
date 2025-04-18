@@ -20,11 +20,6 @@ L’API utilise Laravel Sanctum pour l’authentification.
 - **Modifier une tâche** : Modifier le titre, la description ou le statut.
 - **Supprimer une tâche** : Supprimer une tâche définitivement.
 
-### 3. Filtrage et Recherche
-
-- **Filtrer les tâches par statut** (`en attente`, `en cours`, `terminé`).
-- **Rechercher une tâche par son titre**.
-
 ### 4. Sécurité et Validation
 
 - Middleware **auth:sanctum** pour sécuriser les routes.
@@ -42,13 +37,13 @@ L’API utilise Laravel Sanctum pour l’authentification.
 
  ### Cloner le projet
 ```bash
-  git clone https://github.com/djamioufadebi/task_manager_app.git
+  git clone https://github.com/djamioufadebi/taskmanager_backend_resit.git
 ```
 
 ### Aller au répertoire du projet
 
 ```bash
-  cd task_manager_app
+  cd taskmanager_backend_resit
 ```
 
 ### Installer les dépendances
@@ -136,10 +131,4 @@ L’API utilise Laravel Sanctum pour l’authentification.
 | :-------- | :------- | :-------------------------------- |
 | `id`      | `string` | **Required**. Id de la tâche |
 
-## Feedback
 
-Si vous avez des commentaires, veuillez nous contacter sur <djamioufadebi@gmail.com>
-
-## Auteur
-
-- [@djamioufadebi](https://www.github.com/djamioufadebi)
